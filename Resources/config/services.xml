@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services
+        http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>   
+        <parameter key="vtereshenkov_sonata_operation.autofind" />
+    </parameters>
+    <services>
+         <service id="vtereshenkov_sonata_operation.log.user.action" class="Vtereshenkov\SonataOperationBundle\Service\LogUserAction" public="true">
+            <argument key="$em" type="service" id="doctrine.orm.entity_manager"/>           
+        </service>
+        
+        <service id="Vtereshenkov\SonataOperationBundle\Service\LogUserAction" alias="vtereshenkov_sonata_operation.log.user.action" />
+        
+        <!--listener for sonata CRUD event-->
+        <service id="Vtereshenkov\SonataOperationBundle\EventListener\SonataAdminListener">
+            <tag name="kernel.event_listener" event="sonata.admin.event.persistence.pre_update" method="onPreUpdate" />
+            <tag name="kernel.event_listener" event="sonata.admin.event.persistence.post_persist" method="onPostCreate" />
+            <tag name="kernel.event_listener" event="sonata.admin.event.persistence.pre_remove" method="onPreRemove" />
+            <tag name="kernel.event_listener" event="sonata.admin.event.configure.form" method="onConfigureForm" />
+            
+            <argument key="$em" type="service" id="doctrine.orm.entity_manager"/>
+            <argument key="$securityTokenStorage" type="service" id="security.token_storage"/>  
+            <argument key="$lua" type="service" id="vtereshenkov_sonata_operation.log.user.action"/>                 
+        </service>                           
+                
+        
+        <service id="admin.operation" class="Vtereshenkov\SonataOperationBundle\Admin\OperationAdmin">
+            <argument />
+            <argument>Vtereshenkov\SonataOperationBundle\Entity\Operation</argument>
+            <argument>Vtereshenkov\SonataOperationBundle\Controller\CRUDOperationController</argument>
+            
+            <tag
+                name="sonata.admin"
+                manager_type="orm"
+                group="Operation"
+                label="Operation"               
+            />
+        </service>
+      
+
+       
+    </services>
+</container>

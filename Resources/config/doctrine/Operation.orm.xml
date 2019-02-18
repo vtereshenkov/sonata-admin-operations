@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Vtereshenkov\SonataOperationBundle\Entity\Operation" table="vtereshenkov_sonata_operation">
+        <id name="id" type="integer"><generator strategy="AUTO"/></id>
+      
+        <field name="title" column="title" type="string" length="255" />
+
+        <many-to-one field="author" target-entity="\Vtereshenkov\SonataOperationBundle\Entity\Operation\UserInterface">
+            <join-column name="author_id"
+                         referenced-column-name="id"
+                         on-delete="CASCADE"
+                         nullable="false" />
+        </many-to-one>
+        
+        <many-to-one field="authorGroup" target-entity="\Vtereshenkov\SonataOperationBundle\Entity\Operation\GroupInterface">
+            <join-column name="author_group_id"
+                         referenced-column-name="id"                         
+                         nullable="true" />
+        </many-to-one>
+        
+        <many-to-one field="className" target-entity="\Vtereshenkov\SonataOperationBundle\Entity\ClassName" inversed-by="operations">
+            <join-column nullable="false" />
+        </many-to-one>
+        
+        <field name="classObjectId" column="class_object_id" type="integer" />
+        <field name="date" column="date" type="datetime" />
+        <field name="moderated" column="moderated" type="boolean" />
+        <field name="moderationDate" column="moderation_date" type="datetime" nullable="true" />
+        <many-to-one field="moderator" target-entity="\Vtereshenkov\SonataOperationBundle\Entity\Operation\UserInterface">
+            <join-column nullable="true" />
+        </many-to-one>
+        <field name="objectAfter" column="object_after" type="text" nullable="true" />
+        <field name="objectBefore" column="object_before" type="text" nullable="true" />
+        <many-to-one field="type" target-entity="\Vtereshenkov\SonataOperationBundle\Entity\OperationType" inversed-by="operations">
+            <join-column nullable="false" />
+        </many-to-one>
+    </entity>
+
+</doctrine-mapping>
