@@ -8,7 +8,7 @@
         <parameter key="vtereshenkov_sonata_operation.autofind" />
     </parameters>
     <services>
-         <service id="vtereshenkov_sonata_operation.log.user.action" class="Vtereshenkov\SonataOperationBundle\Service\LogUserAction" public="true">
+        <service id="vtereshenkov_sonata_operation.log.user.action" class="Vtereshenkov\SonataOperationBundle\Service\LogUserAction" public="true">
             <argument key="$em" type="service" id="doctrine.orm.entity_manager"/>           
         </service>
         
@@ -38,9 +38,7 @@
                 group="Operation"
                 label="Operation"               
             />
-        </service>
-      
-
+        </service>          
        
     </services>
 </container>

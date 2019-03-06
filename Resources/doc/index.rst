@@ -23,7 +23,7 @@ Installation process:
 5. Update your database schema
 
 
-Step 1: Download MsalsasVotingBundle using composer
+Step 1: Download VtereshenkovSonataOperationBundle using composer
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Add bundle repository in you composer.json
@@ -91,7 +91,7 @@ Add the following configuration to your ``config/packages/vtereshenkov_sonata_op
         # config/packages/vtereshenkov_sonata_operation.yaml
         vtereshenkov_sonata_operation:
             user_provider: \App\Application\Sonata\UserBundle\Entity\User # Your ``User`` class which the implements Symfony\Component\Security\Core\User\UserInterface
-            user_provider: \App\Application\Sonata\UserBundle\Entity\Group # Your ``UserGroup`` class which the implements FOS\UserBundle\Model\GroupInterface
+            user_group_provider: \App\Application\Sonata\UserBundle\Entity\Group # Your ``UserGroup`` class which the implements FOS\UserBundle\Model\GroupInterface
             
 
 

@@ -29,14 +29,14 @@ class LogUserAction {
                 if(!empty($temp['title'])){
                     $oprationTitle = $temp['title'];
                 }else{
-                    $oprationTitle = (!empty($temp['name']) ? $temp['name'] : $temp['username']);
+                    $oprationTitle = (!empty($temp['name']) ? $temp['name'] : 'Undefined title');
                 }
             }else{
                 $temp = unserialize($dataAfter);
                 if(!empty($temp['title'])){
                     $oprationTitle = $temp['title'];
                 }else{
-                    $oprationTitle = (!empty($temp['name']) ? $temp['name'] : $temp['username']);
+                    $oprationTitle = (!empty($temp['name']) ? $temp['name'] : 'Undefined title');
                 }
             }
             $operation = new Operation();
