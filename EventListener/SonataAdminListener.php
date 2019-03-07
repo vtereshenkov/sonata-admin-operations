@@ -87,7 +87,7 @@ class SonataAdminListener
         if (is_object($object)) {
             $reflect = new ReflectionClass($object);
             $props = $reflect->getProperties();
-
+            
             foreach ($props as $prop) {
                 $methodForProp = 'get' . ucfirst($prop->getName());
 
@@ -118,6 +118,9 @@ class SonataAdminListener
                                         }
                                     }
                                 }
+                                break;
+                            case 'DateTime':
+                                $dataLog[$prop->getName()] = $propValue->format("Y-m-d");                               
                                 break;
                             default :
                                 /* Check method getName */
