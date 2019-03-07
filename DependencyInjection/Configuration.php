@@ -37,6 +37,14 @@ class Configuration implements ConfigurationInterface
                 ->defaultValue('\App\Application\Sonata\UserBundle\Entity\Group')
                 ->info('User Group Entity (for example FOS\UserBundle\Model\Group or Sonata\UserBundle\Entity\BaseGroup)')
                 ->end()
+                ->booleanNode('use_short_class_name')
+                ->defaultFalse()
+                ->end()
+                ->arrayNode('exclude_from_history')
+                ->scalarPrototype()
+                ->defaultValue([])
+                ->info('List of classes that are excluded from the history. Format "Vtereshenkov\ReservationBundle\Entity\Location"')
+                ->end()
                 ->end();
 
         return $builder;

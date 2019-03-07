@@ -5,11 +5,13 @@
         http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>   
-        <parameter key="vtereshenkov_sonata_operation.autofind" />
+        <parameter key="vtereshenkov_sonata_operation.use.short.classname" />
+        <parameter key="vtereshenkov_sonata_operation.exclude.from.history" />
     </parameters>
     <services>
         <service id="vtereshenkov_sonata_operation.log.user.action" class="Vtereshenkov\SonataOperationBundle\Service\LogUserAction" public="true">
-            <argument key="$em" type="service" id="doctrine.orm.entity_manager"/>           
+            <argument key="$em" type="service" id="doctrine.orm.entity_manager"/> 
+            <argument key="$useShortName" type="string">%vtereshenkov_sonata_operation.use.short.classname%</argument>
         </service>
         
         <service id="Vtereshenkov\SonataOperationBundle\Service\LogUserAction" alias="vtereshenkov_sonata_operation.log.user.action" />
@@ -23,7 +25,8 @@
             
             <argument key="$em" type="service" id="doctrine.orm.entity_manager"/>
             <argument key="$securityTokenStorage" type="service" id="security.token_storage"/>  
-            <argument key="$lua" type="service" id="vtereshenkov_sonata_operation.log.user.action"/>                 
+            <argument key="$lua" type="service" id="vtereshenkov_sonata_operation.log.user.action"/>             
+            <argument key="$excludeFromSave" type="string">%vtereshenkov_sonata_operation.exclude.from.history%</argument>                         
         </service>                           
                 
         

@@ -15,20 +15,21 @@ class SonataAdminListener
     protected $em;
     protected $lua;
     protected $sts;
+    private $excludeFromSave = [];
     private $oldObjectData = '';
 
-    public function __construct(EntityManagerInterface $em, TokenStorage $securityTokenStorage, LogUserAction $lua)
+    public function __construct(EntityManagerInterface $em, TokenStorage $securityTokenStorage, LogUserAction $lua, array $excludeFromSave)
     {
         $this->em = $em;
         $this->lua = $lua;
         $this->sts = $securityTokenStorage;
+        $this->excludeFromSave = $excludeFromSave;
     }
-    
-    
-    public function onConfigureForm(ConfigureEvent $event){
+
+    public function onConfigureForm(ConfigureEvent $event)
+    {
         $object = $event->getAdmin()->getSubject();
-        $this->oldObjectData = $this->_serealizeDataForLog($object);        
-        
+        $this->oldObjectData = $this->_serealizeDataForLog($object);
     }
 
     public function onPreUpdate(PersistenceEvent $event)
@@ -36,12 +37,13 @@ class SonataAdminListener
         $object = $event->getObject();
         $className = get_class($object);
 
-//        $original = $this->em->getUnitOfWork()->getOriginalEntityData($object);
-        $user = $this->sts->getToken()->getUser();
-        $dataBefore = $this->oldObjectData;
-        $dataAfter = $this->_serealizeDataForLog($object);
-       
-        $this->lua->createRecord($className, 'edit', $user, $object->getId(), $dataBefore, $dataAfter);
+        if (!in_array($className, $this->excludeFromSave)) {
+            $user = $this->sts->getToken()->getUser();
+            $dataBefore = $this->oldObjectData;
+            $dataAfter = $this->_serealizeDataForLog($object);
+
+            $this->lua->createRecord($className, 'edit', $user, $object->getId(), $dataBefore, $dataAfter);
+        }
     }
 
     /**
@@ -54,20 +56,24 @@ class SonataAdminListener
     {
         $object = $event->getObject();
         $className = get_class($object);
-        $user = $this->sts->getToken()->getUser();
-        $dataAfter = $this->_serealizeDataForLog($object);
+        if (!in_array($className, $this->excludeFromSave)) {
+            $user = $this->sts->getToken()->getUser();
+            $dataAfter = $this->_serealizeDataForLog($object);
 
-        $this->lua->createRecord($className, 'create', $user, $object->getId(), null, $dataAfter);
+            $this->lua->createRecord($className, 'create', $user, $object->getId(), null, $dataAfter);
+        }
     }
 
     public function onPreRemove(PersistenceEvent $event)
     {
         $object = $event->getObject();
         $className = get_class($object);
-        $user = $this->sts->getToken()->getUser();
+        if (!in_array($className, $this->excludeFromSave)) {
+            $user = $this->sts->getToken()->getUser();
 
-        $dataBefore = $this->_serealizeDataForLog($object);
-        $this->lua->createRecord($className, 'remove', $user, $object->getId(), $dataBefore, null);
+            $dataBefore = $this->_serealizeDataForLog($object);
+            $this->lua->createRecord($className, 'remove', $user, $object->getId(), $dataBefore, null);
+        }
     }
 
     /**

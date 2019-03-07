@@ -24,6 +24,11 @@ class VtereshenkovSonataOperationExtension extends Extension implements PrependE
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');
+        $config = $this->processConfiguration(new Configuration(), $configs);
+        
+        $container->setParameter('vtereshenkov_sonata_operation.use.short.classname', $config['use_short_class_name']);
+        $container->setParameter('vtereshenkov_sonata_operation.exclude.from.history', $config['exclude_from_history']);
+        
     }
 
     public function getAlias()
